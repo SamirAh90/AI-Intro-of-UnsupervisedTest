@@ -1,0 +1,1063 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Ultimate AI & ML Exam (100 Questions)</title>
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --accent: #e74c3c;
+            --success: #27ae60;
+            --bg: #f3f4f6;
+            --text: #2d3436;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        .app-container {
+            width: 100%;
+            max-width: 900px;
+            background: white;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        @media (min-width: 768px) {
+            .app-container {
+                min-height: auto;
+                margin: 40px auto;
+                border-radius: 12px;
+                overflow: hidden;
+            }
+        }
+
+        /* HEADER */
+        header {
+            background: var(--primary);
+            color: white;
+            padding: 15px 20px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-flex {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        h1 { margin: 0; font-size: 1.2rem; }
+        .badge { background: rgba(255,255,255,0.2); padding: 4px 10px; border-radius: 12px; font-size: 0.9rem; }
+
+        .progress-bar {
+            height: 6px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 3px;
+        }
+        .progress-fill {
+            height: 100%;
+            background: var(--success);
+            width: 0%;
+            transition: width 0.3s;
+        }
+
+        /* MAIN CONTENT */
+        .quiz-body {
+            padding: 20px;
+            flex: 1;
+        }
+
+        .question-card {
+            margin-bottom: 20px;
+        }
+
+        .q-text {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 25px;
+            line-height: 1.4;
+            color: var(--primary);
+        }
+
+        .options-grid {
+            display: grid;
+            gap: 12px;
+            grid-template-columns: 1fr;
+        }
+        
+        @media (min-width: 600px) {
+            .options-grid { grid-template-columns: 1fr 1fr; }
+        }
+
+        button.option {
+            background: #fff;
+            border: 2px solid #e0e0e0;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: left;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: var(--text);
+        }
+
+        button.option:hover:not(:disabled) {
+            border-color: var(--secondary);
+            background: #f8fbff;
+        }
+
+        button.option.correct {
+            background: #d4edda;
+            border-color: var(--success);
+            color: #155724;
+        }
+
+        button.option.wrong {
+            background: #f8d7da;
+            border-color: var(--accent);
+            color: #721c24;
+        }
+
+        button.option:disabled { cursor: default; }
+
+        /* FEEDBACK */
+        .feedback {
+            display: none;
+            margin-top: 20px;
+            padding: 15px;
+            background: #eef2f5;
+            border-left: 5px solid var(--secondary);
+            border-radius: 4px;
+            animation: fadeIn 0.3s;
+        }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+
+        .source-tag {
+            display: block;
+            margin-top: 8px;
+            font-size: 0.85rem;
+            color: #666;
+            font-style: italic;
+        }
+
+        /* FOOTER */
+        .nav-footer {
+            padding: 15px 20px;
+            border-top: 1px solid #eee;
+            background: #fff;
+            display: none; /* hidden until answer */
+            justify-content: flex-end;
+            position: sticky;
+            bottom: 0;
+        }
+
+        .next-btn {
+            background: var(--secondary);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        /* RESULTS */
+        .results-view {
+            display: none;
+            text-align: center;
+            padding: 40px 20px;
+        }
+        .big-score { font-size: 4rem; font-weight: bold; color: var(--primary); }
+        .restart-btn {
+            margin-top: 20px;
+            background: var(--primary);
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.1rem;
+        }
+    </style>
+</head>
+<body>
+
+<div class="app-container">
+    <header id="appHeader">
+        <div class="header-flex">
+            <h1>ML Master Exam - Chapter 1</h1>
+            <p>Artificiell Intelligens (50%, omg 1) - HT25 (Samir Ahmad)</p>
+            <div class="badge">Q: <span id="qNum">1</span>/100</div>
+        </div>
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+    </header>
+
+    <div class="quiz-body" id="quizBody">
+        <div class="question-card">
+            <div class="q-text" id="questionText">Loading Question...</div>
+            <div class="options-grid" id="optionsGrid"></div>
+        </div>
+
+        <div class="feedback" id="feedbackArea">
+            <strong id="feedbackTitle" style="display:block; margin-bottom:5px;"></strong>
+            <span id="feedbackReason"></span>
+            <span class="source-tag" id="feedbackSource"></span>
+        </div>
+    </div>
+
+    <div class="nav-footer" id="navFooter">
+        <button class="next-btn" onclick="nextQ()">Next Question ➜</button>
+    </div>
+
+    <div class="results-view" id="resultsView">
+        <h2>Exam Completed!</h2>
+        <p>Your Final Score:</p>
+        <div class="big-score" id="finalScoreDisplay">0</div>
+        <p id="finalMsg"></p>
+        <button class="restart-btn" onclick="location.reload()">Take Exam Again</button>
+    </div>
+</div>
+
+<script>
+    // --- DATABASE OF 100 QUESTIONS ---
+    const db = [
+        // ==========================================
+        // PART 1: SLIDES & CONVERSATION (Basics) ~28
+        // ==========================================
+        {
+            q: "What distinguishes Supervised Learning from Unsupervised Learning?",
+            opts: ["Supervised uses labeled data; Unsupervised uses unlabeled data", "Supervised uses text; Unsupervised uses images", "Unsupervised uses a teacher signal", "There is no difference"],
+            a: 0,
+            exp: "Supervised learning relies on input-output pairs (labels), whereas Unsupervised learning looks for patterns in unlabeled data.",
+            src: "Source: Slide 'Types of Learning'"
+        },
+        {
+            q: "Which of these is a classic Unsupervised Learning application?",
+            opts: ["Email Spam Filter", "Customer Segmentation (Clustering)", "Stock Price Prediction", "Face ID"],
+            a: 1,
+            exp: "Clustering groups customers by similarity without knowing the segments beforehand.",
+            src: "Source: Slide 'Unsupervised Applications'"
+        },
+        {
+            q: "In K-Means, the 'Centroid' represents:",
+            opts: ["The outlier", "The geometric center (average) of a cluster", "The starting point only", "The border line"],
+            a: 1,
+            exp: "It is the mean vector of all points assigned to that cluster.",
+            src: "Source: Slide 'K-Means Steps'"
+        },
+        {
+            q: "The 'Elbow Method' is used to determine:",
+            opts: ["The learning rate", "The optimal number of clusters (k)", "The maximum depth of a tree", "The number of hidden layers"],
+            a: 1,
+            exp: "It helps you choose 'k' by finding the point of diminishing returns in error reduction.",
+            src: "Source: Slide 'The Elbow Method'"
+        },
+        {
+            q: "Euclidean Distance calculates:",
+            opts: ["The straight-line distance between two points", "The path along a grid (city block)", "The angle between vectors", "The probability of connection"],
+            a: 0,
+            exp: "It uses the Pythagorean theorem (a² + b² = c²) to find the direct distance.",
+            src: "Source: Slide 'Euclidean Distance'"
+        },
+        {
+            q: "Agglomerative Clustering is a ________ approach.",
+            opts: ["Top-Down", "Bottom-Up", "Partitioning", "Random"],
+            a: 1,
+            exp: "It starts with individual points and merges them upwards into larger clusters.",
+            src: "Source: Slide 'Hierarchical Clustering'"
+        },
+        {
+            q: "Anomaly Detection is best suited for:",
+            opts: ["Grouping similar news articles", "Identifying credit card fraud", "Predicting house prices", "Translating languages"],
+            a: 1,
+            exp: "It flags rare events that deviate from the 'normal' pattern.",
+            src: "Source: Slide 'Anomaly Detection'"
+        },
+        {
+            q: "Market Basket Analysis ('Beer and Diapers') uses which technique?",
+            opts: ["Association Mining", "K-Means Clustering", "Linear Regression", "PCA"],
+            a: 0,
+            exp: "It looks for co-occurrence rules (If X is bought, Y is likely bought).",
+            src: "Source: Conversation Example"
+        },
+        {
+            q: "If K-Means centroids stop moving, the algorithm has:",
+            opts: ["Crashed", "Converged", "Failed", "Overfitted"],
+            a: 1,
+            exp: "Convergence means the assignments have stabilized.",
+            src: "Source: Slide 'Stopping Rules'"
+        },
+        {
+            q: "What is a main disadvantage of K-Means?",
+            opts: ["It is too slow", "You must specify 'k' manually", "It handles outliers perfectly", "It works only on text"],
+            a: 1,
+            exp: "Unlike hierarchical methods, K-Means requires you to guess or calculate 'k' before starting.",
+            src: "Source: Conversation"
+        },
+        {
+            q: "What is 'Intra-cluster similarity'?",
+            opts: ["Similarity between different groups", "Similarity of items within the same group", "Distance to the origin", "None of the above"],
+            a: 1,
+            exp: "We want high intra-cluster similarity (items inside a group should be very alike).",
+            src: "Source: Slide 'Cluster Definition'"
+        },
+        {
+            q: "What is 'Inter-cluster similarity'?",
+            opts: ["Similarity between items in the same group", "Similarity between different groups", "The error rate", "The accuracy"],
+            a: 1,
+            exp: "We want low inter-cluster similarity (distinct groups should be far apart).",
+            src: "Source: Slide 'Cluster Definition'"
+        },
+        {
+            q: "Dimensionality Reduction is used to:",
+            opts: ["Delete rows of data", "Simplify data by reducing variables (columns)", "Increase file size", "Add more features"],
+            a: 1,
+            exp: "It compresses information (e.g., from 3D to 2D) to make processing easier.",
+            src: "Source: Slide 'Unsupervised Applications'"
+        },
+        {
+            q: "Which algorithm is 'Partitioning'?",
+            opts: ["Agglomerative", "Divisive", "K-Means", "DBSCAN"],
+            a: 2,
+            exp: "K-Means cuts the data into distinct, non-overlapping partitions.",
+            src: "Source: Slide 'Partitioning Approach'"
+        },
+        {
+            q: "A Dendrogram is a visualization for:",
+            opts: ["K-Means", "Hierarchical Clustering", "Neural Networks", "Regression"],
+            a: 1,
+            exp: "It shows the tree-like structure of merges or splits.",
+            src: "Source: Slide 'Hierarchical Clustering'"
+        },
+        {
+            q: "The default max iterations for K-Means in R is often:",
+            opts: ["100", "10", "1", "Infinite"],
+            a: 1,
+            exp: "It's a safety net to prevent infinite loops if the data oscillates.",
+            src: "Source: Slide 'Stopping Rules'"
+        },
+        {
+            q: "K-Means is sensitive to:",
+            opts: ["Outliers and Initial Centroid positions", "Nothing", "The color of the plot", "The user's name"],
+            a: 0,
+            exp: "A bad random start or a single extreme outlier can ruin the cluster results.",
+            src: "Source: Russell & Norvig"
+        },
+        {
+            q: "If your Elbow Graph is a smooth curve (no elbow), you should:",
+            opts: ["Give up", "Use business logic/context to pick k", "Pick k=1", "Pick k=100"],
+            a: 1,
+            exp: "Math isn't always clear; practical requirements (e.g., budget for 3 segments) take over.",
+            src: "Source: Slide 'Situations with no elbow'"
+        },
+        {
+            q: "Reshuffling in K-Means refers to:",
+            opts: ["Points switching clusters during the update step", "Randomizing the dataset", "Deleting data", "Sorting the excel file"],
+            a: 0,
+            exp: "As centroids move, points may find they are now closer to a different centroid.",
+            src: "Source: Slide 'Reshuffling'"
+        },
+        {
+            q: "Predicting a continuous number (e.g., Temperature) is:",
+            opts: ["Classification", "Regression", "Clustering", "Association"],
+            a: 1,
+            exp: "Regression predicts quantities; Classification predicts labels.",
+            src: "Source: Slide 'Types of Learning'"
+        },
+        {
+            q: "Predicting a label (e.g., Cat vs Dog) is:",
+            opts: ["Classification", "Regression", "Clustering", "Association"],
+            a: 0,
+            exp: "Classification maps inputs to discrete categories.",
+            src: "Source: Slide 'Types of Learning'"
+        },
+        {
+            q: "Divisive Clustering is:",
+            opts: ["Top-Down", "Bottom-Up", "Partitioning", "Random"],
+            a: 0,
+            exp: "It starts with one giant cluster and splits it down recursively.",
+            src: "Source: Slide 'Divisive'"
+        },
+        {
+            q: "Which is NOT a step in K-Means?",
+            opts: ["Assign points", "Update centroids", "Draw decision tree", "Initialize k"],
+            a: 2,
+            exp: "Decision trees are for supervised classification, not K-Means.",
+            src: "Source: Slide 'K-Means Steps'"
+        },
+        {
+            q: "Silhouette Score measures:",
+            opts: ["How well-separated the clusters are", "The speed of code", "The number of outliers", "The probability of error"],
+            a: 0,
+            exp: "A higher Silhouette Score indicates better-defined clusters.",
+            src: "Source: Conversation"
+        },
+        {
+            q: "Categorizing stars based on brightness/color is:",
+            opts: ["Supervised", "Unsupervised (Clustering)", "Reinforcement", "Semi-supervised"],
+            a: 1,
+            exp: "The Hertzsprung-Russell diagram was discovered by clustering stars without knowing types beforehand.",
+            src: "Source: Slide 'Categorizing Stars'"
+        },
+        {
+            q: "The 'Curse of Dimensionality' makes clustering:",
+            opts: ["Easier", "Harder", "Faster", "More colorful"],
+            a: 1,
+            exp: "In high dimensions, distance metrics lose meaning, making clustering difficult.",
+            src: "Source: Russell & Norvig"
+        },
+        {
+            q: "Standardizing data (Scaling) before clustering is:",
+            opts: ["Important", "Useless", "Only for text", "Only for images"],
+            a: 0,
+            exp: "It prevents variables with large numbers (like Salary) from dominating variables with small numbers (like Age).",
+            src: "Source: Conversation"
+        },
+        {
+            q: "Semi-Supervised Learning uses:",
+            opts: ["No labels", "All labels", "Small amount of labeled data + large amount of unlabeled", "Only images"],
+            a: 2,
+            exp: "It leverages the structure of unlabeled data to improve learning from limited labels.",
+            src: "Source: Russell & Norvig"
+        },
+
+        // ========================================================
+        // PART 2: ADVANCED AIMA BOOK (Russell & Norvig) ~32
+        // ========================================================
+        {
+            q: "K-Means minimizes which specific metric?",
+            opts: ["Sum of Squared Errors (SSE)", "Accuracy", "F1 Score", "Log Loss"],
+            a: 0,
+            exp: "It tries to minimize the squared Euclidean distance between points and their centroids.",
+            src: "Source: AIMA p.671"
+        },
+        {
+            q: "What is 'Vector Quantization'?",
+            opts: ["Approximating data with a small set of prototype vectors", "Turning words to numbers", "Adding dimensions", "Sorting vectors"],
+            a: 0,
+            exp: "Used in compression, it replaces specific values with the nearest cluster centroid (prototype).",
+            src: "Source: AIMA p.673"
+        },
+        {
+            q: "What is 'Soft' Clustering?",
+            opts: ["Points belong to clusters with probabilities (e.g., 70% A, 30% B)", "Points are fuzzy", "Clusters overlap physically", "It uses soft hardware"],
+            a: 0,
+            exp: "Unlike 'Hard' K-Means, soft clustering (like GMM) assigns probabilities of membership.",
+            src: "Source: AIMA p.685"
+        },
+        {
+            q: "Mixture of Gaussians (GMM) models clusters as:",
+            opts: ["Squares", "Probability distributions (Bell curves)", "Straight lines", "Decision trees"],
+            a: 1,
+            exp: "It assumes data is generated by a mix of several Gaussian distributions.",
+            src: "Source: AIMA p.686"
+        },
+        {
+            q: "The 'E' step in the EM algorithm stands for:",
+            opts: ["Expectation", "Evaluation", "Estimation", "Evolution"],
+            a: 0,
+            exp: "It calculates the expected value of the hidden variables (cluster memberships).",
+            src: "Source: AIMA p.687"
+        },
+        {
+            q: "The 'M' step in the EM algorithm stands for:",
+            opts: ["Maximization", "Movement", "Manipulation", "Model"],
+            a: 0,
+            exp: "It updates parameters to maximize the likelihood of the data.",
+            src: "Source: AIMA p.687"
+        },
+        {
+            q: "EM algorithm is prone to:",
+            opts: ["Local Maxima", "Global Maxima", "Infinite loops", "Memory leaks"],
+            a: 0,
+            exp: "Like K-Means, it can get stuck in a suboptimal solution depending on the start.",
+            src: "Source: AIMA p.689"
+        },
+        {
+            q: "Single Linkage clustering measures distance between:",
+            opts: ["Closest points in two clusters", "Farthest points", "Centroids", "Average points"],
+            a: 0,
+            exp: "It uses the 'nearest neighbor' distance between groups.",
+            src: "Source: AIMA p.696"
+        },
+        {
+            q: "Complete Linkage clustering measures distance between:",
+            opts: ["Closest points", "Farthest points in two clusters", "Centroids", "Random points"],
+            a: 1,
+            exp: "It uses the 'farthest neighbor' distance, keeping clusters compact.",
+            src: "Source: AIMA p.696"
+        },
+        {
+            q: "Single Linkage often results in:",
+            opts: ["Chaining effect (long thin clusters)", "Spherical clusters", "Square clusters", "Perfect clusters"],
+            a: 0,
+            exp: "It can merge distinct groups if a thin chain of points connects them.",
+            src: "Source: AIMA p.696"
+        },
+        {
+            q: "Spectral Clustering uses ______ to find clusters.",
+            opts: ["Eigenvalues/Eigenvectors", "Euclidean distance only", "Random guessing", "Decision Trees"],
+            a: 0,
+            exp: "It maps data to a new space using eigenvectors, effective for non-spherical shapes.",
+            src: "Source: AIMA p.699"
+        },
+        {
+            q: "PCA stands for:",
+            opts: ["Principal Component Analysis", "Primary Cluster Assignment", "Partial Code Algorithm", "Past Calculation Area"],
+            a: 0,
+            exp: "A technique for dimensionality reduction.",
+            src: "Source: AIMA p.706"
+        },
+        {
+            q: "The first Principal Component in PCA captures:",
+            opts: ["The direction of maximum variance", "The smallest variance", "The noise", "The outliers"],
+            a: 0,
+            exp: "It aligns with the spread of the data that contains the most information.",
+            src: "Source: AIMA p.706"
+        },
+        {
+            q: "ICA (Independent Component Analysis) is used for:",
+            opts: ["Separating mixed signals (Cocktail Party Problem)", "Compressing images", "Classifying text", "Creating clusters"],
+            a: 0,
+            exp: "It separates statistically independent sources from a mixed signal.",
+            src: "Source: AIMA p.709"
+        },
+        {
+            q: "Self-Training in semi-supervised learning means:",
+            opts: ["The model learns on its own confident predictions", "The model reads a book", "The user trains the model", "It uses no data"],
+            a: 0,
+            exp: "It labels unlabeled data where it is confident, then retrains itself on those new labels.",
+            src: "Source: AIMA p.716"
+        },
+        {
+            q: "An Autoencoder is a neural network designed to:",
+            opts: ["Copy input to output (reconstruction)", "Classify images", "Play games", "Write text"],
+            a: 0,
+            exp: "It compresses input to a bottleneck and tries to recreate it, learning features in the process.",
+            src: "Source: AIMA p.725"
+        },
+        {
+            q: "The middle layer of an Autoencoder is called the:",
+            opts: ["Bottleneck", "Output", "Input", "Softmax"],
+            a: 0,
+            exp: "It restricts the information flow, forcing the network to learn efficient representations.",
+            src: "Source: AIMA p.725"
+        },
+        {
+            q: "Denoising Autoencoders are trained to:",
+            opts: ["Remove noise from corrupted inputs", "Create noise", "Ignore inputs", "Delete data"],
+            a: 0,
+            exp: "They learn robust features by trying to recover the clean original from a noisy version.",
+            src: "Source: AIMA p.726"
+        },
+        {
+            q: "GAN stands for:",
+            opts: ["Generative Adversarial Network", "General AI Network", "Global Area Network", "Genetic Algorithm Node"],
+            a: 0,
+            exp: "A framework where two nets compete (Generator vs Discriminator).",
+            src: "Source: AIMA p.731"
+        },
+        {
+            q: "In a GAN, the Discriminator's job is to:",
+            opts: ["Distinguish real data from fake data", "Generate data", "Sort data", "Label data"],
+            a: 0,
+            exp: "It tries to catch the Generator's fakes.",
+            src: "Source: AIMA p.731"
+        },
+        {
+            q: "In a GAN, the Generator's job is to:",
+            opts: ["Fool the Discriminator", "Classify data", "Clean data", "Stop the training"],
+            a: 0,
+            exp: "It tries to create synthetic data that looks real enough to pass the Discriminator.",
+            src: "Source: AIMA p.731"
+        },
+        {
+            q: "Representation Learning aims to:",
+            opts: ["Automatically discover useful features from raw data", "Manually create features", "Memorize data", "Represent data as text"],
+            a: 0,
+            exp: "Deep learning effectively automates the feature engineering process.",
+            src: "Source: AIMA p.720"
+        },
+        {
+            q: "Distributional Clustering groups:",
+            opts: ["Words based on context distributions", "Numbers based on value", "Images based on color", "Users based on age"],
+            a: 0,
+            exp: "Used in NLP, it groups words that appear in similar contexts.",
+            src: "Source: AIMA p.692"
+        },
+        {
+            q: "k-means++ is an improvement that:",
+            opts: ["Selects initial centroids smartly", "Runs faster", "Uses less memory", "Is fully supervised"],
+            a: 0,
+            exp: "It spreads out initial centroids to avoid bad local minima.",
+            src: "Source: AIMA p.672"
+        },
+        {
+            q: "Probabilistic PCA uses which distribution?",
+            opts: ["Gaussian", "Uniform", "Poisson", "Binomial"],
+            a: 0,
+            exp: "It reformulates PCA as a probabilistic model using Gaussian latent variables.",
+            src: "Source: AIMA p.708"
+        },
+        {
+            q: "If you cluster continuous data that has no natural gaps, you are performing:",
+            opts: ["Quantization (Discretization)", "Classification", "Regression", "Error"],
+            a: 0,
+            exp: "Breaking a continuous range into chunks (e.g., sizes S/M/L) is quantization.",
+            src: "Source: AIMA p.673"
+        },
+        {
+            q: "Complexity of Hierarchical Clustering is generally:",
+            opts: ["High (O(N²) or O(N³))", "Low (O(N))", "Instant", "Constant"],
+            a: 0,
+            exp: "Calculating the distance matrix makes it slow for large datasets.",
+            src: "Source: AIMA p.696"
+        },
+        {
+            q: "Hierarchical clustering output is deterministic (same result every time) if:",
+            opts: ["There are no tied distances", "You use random seed", "You use K-Means", "Never"],
+            a: 0,
+            exp: "Unlike K-Means, hierarchical methods (like Agglomerative) are deterministic unless there are ties in distances.",
+            src: "Source: AIMA"
+        },
+        {
+            q: "Latent Dirichlet Allocation (LDA) is a model for:",
+            opts: ["Topic Modeling (Text)", "Image Classification", "Voice Recognition", "Spam Filtering"],
+            a: 0,
+            exp: "It discovers abstract 'topics' in a collection of documents.",
+            src: "Source: AIMA (Topic Models)"
+        },
+        {
+            q: "Which technique projects data onto a lower-dimensional hyperplane?",
+            opts: ["PCA", "K-Means", "DBSCAN", "Random Forest"],
+            a: 0,
+            exp: "PCA finds the hyperplane that preserves the most variance.",
+            src: "Source: AIMA p.706"
+        },
+        {
+            q: "What is 'Reconstruction Error'?",
+            opts: ["Difference between original input and reconstructed output", "Error in code", "Compilation error", "Label error"],
+            a: 0,
+            exp: "Used in PCA and Autoencoders to measure how much info was lost.",
+            src: "Source: AIMA p.707"
+        },
+        {
+            q: "Co-Training requires:",
+            opts: ["Two independent 'views' (feature sets) of the data", "Two computers", "Two teachers", "Double the data"],
+            a: 0,
+            exp: "A semi-supervised method where two classifiers train each other on different features.",
+            src: "Source: AIMA p.717"
+        },
+
+        // ========================================================
+        // PART 3: CHAPTER 1 (Intro, History, Challenges) ~40 NEW
+        // ========================================================
+        {
+            q: "According to Arthur Samuel (1959), Machine Learning is:",
+            opts: ["Field of study that gives computers the ability to learn without being explicitly programmed", "The science of building robots", "Writing code that sums numbers", "Creating artificial brains"],
+            a: 0,
+            exp: "This is the famous founding definition of the field.",
+            src: "Source: Chapter 1 (Intro)"
+        },
+        {
+            q: "Tom Mitchell's (1997) engineering definition of ML involves three components: E, T, and P. What are they?",
+            opts: ["Experience, Task, Performance", "Energy, Time, Power", "Examples, Training, Programming", "Efficiency, Testing, Planning"],
+            a: 0,
+            exp: "A program learns from Experience (E) with respect to Task (T) and Performance (P).",
+            src: "Source: Chapter 1 (Definitions)"
+        },
+        {
+            q: "Which of these is NOT a criterion for classifying ML systems?",
+            opts: ["Whether they are supervised or unsupervised", "Whether they can learn incrementally (online)", "Whether they compare to known points or build a model", "Whether they utilize cloud computing"],
+            a: 3,
+            exp: "Cloud computing is infrastructure, not a fundamental classification of the learning algorithm.",
+            src: "Source: Chapter 1 (Types of Systems)"
+        },
+        {
+            q: "In 'Batch Learning', the system:",
+            opts: ["Can learn incrementally", "Must be trained using all available data at once", "Learns in real-time", "Is extremely fast to train"],
+            a: 1,
+            exp: "Batch learning is incapable of learning incrementally; it needs the full dataset to train a new version.",
+            src: "Source: Chapter 1 (Batch vs Online)"
+        },
+        {
+            q: "What is a major disadvantage of Batch Learning?",
+            opts: ["It consumes a lot of computing resources and time", "It is inaccurate", "It cannot handle images", "It is only for text"],
+            a: 0,
+            exp: "Retraining on the whole dataset every time new data arrives is expensive.",
+            src: "Source: Chapter 1 (Batch Learning)"
+        },
+        {
+            q: "Online Learning is best suited for:",
+            opts: ["Systems that receive data as a continuous flow", "Static datasets", "Writing history books", "Calculating pi"],
+            a: 0,
+            exp: "It updates the model step-by-step as new data arrives, ideal for stock markets or weather.",
+            src: "Source: Chapter 1 (Online Learning)"
+        },
+        {
+            q: "What is 'Learning Rate' in Online Learning?",
+            opts: ["How fast the model adapts to changing data", "The speed of the CPU", "The cost of the software", "The time it takes to download"],
+            a: 0,
+            exp: "A high learning rate means it adapts quickly (but forgets old data); low means it's more stable.",
+            src: "Source: Chapter 1 (Hyperparameters)"
+        },
+        {
+            q: "Instance-based learning works by:",
+            opts: ["Memorizing examples and comparing new data to them using a similarity measure", "Building a mathematical formula", "Creating a decision tree", "Random guessing"],
+            a: 0,
+            exp: "K-Nearest Neighbors is a classic example: it just looks at the closest memorized examples.",
+            src: "Source: Chapter 1 (Instance-based)"
+        },
+        {
+            q: "Model-based learning works by:",
+            opts: ["Building a model from examples and using it to make predictions", "Memorizing all data", "Asking a human", "Using a database lookup"],
+            a: 0,
+            exp: "It generalizes from the data to build a function (like a linear regression line).",
+            src: "Source: Chapter 1 (Model-based)"
+        },
+        {
+            q: "If your training data is too small, you face the problem of:",
+            opts: ["Sampling Noise / Insufficient Quantity", "Overfitting", "Big Data", "Underfitting"],
+            a: 0,
+            exp: "Algorithms need enough data to find statistically significant patterns.",
+            src: "Source: Chapter 1 (Challenges)"
+        },
+        {
+            q: "What is 'Sampling Bias'?",
+            opts: ["When the training data is not representative of the real data", "When the computer is slow", "When the algorithm is biased", "When the math is wrong"],
+            a: 0,
+            exp: "Example: Predicting an election using only landline phone surveys (ignores young people).",
+            src: "Source: Chapter 1 (Data Challenges)"
+        },
+        {
+            q: "What implies 'Overfitting' the data?",
+            opts: ["The model performs well on training data but poorly on new data", "The model is too simple", "The model performs poorly on everything", "The model is linear"],
+            a: 0,
+            exp: "The model has memorized the noise in the training set rather than the signal.",
+            src: "Source: Chapter 1 (Overfitting)"
+        },
+        {
+            q: "How can you fix Overfitting?",
+            opts: ["Simplify the model, gather more data, or reduce noise", "Make the model more complex", "Use less data", "Remove the labels"],
+            a: 0,
+            exp: "Regularization (simplifying) and more data are standard cures.",
+            src: "Source: Chapter 1 (Overfitting Solutions)"
+        },
+        {
+            q: "What is 'Underfitting'?",
+            opts: ["The model is too simple to capture the underlying structure", "The model is too complex", "The data is too noisy", "The computer is too slow"],
+            a: 0,
+            exp: "Example: Trying to fit a straight line to complex curved data.",
+            src: "Source: Chapter 1 (Underfitting)"
+        },
+        {
+            q: "What is a 'Hyperparameter'?",
+            opts: ["A parameter of the learning algorithm (set before training)", "A parameter learned by the model", "The output of the model", "The error rate"],
+            a: 0,
+            exp: "Examples: Learning rate, K in K-Means, Regularization strength. They are not learned from data.",
+            src: "Source: Chapter 1 (Parameters)"
+        },
+        {
+            q: "To evaluate a model, you should split your data into:",
+            opts: ["Training Set and Test Set", "Input and Output", "Good and Bad", "Start and End"],
+            a: 0,
+            exp: "You train on one set and test on the hidden 'Test Set' to measure real-world performance.",
+            src: "Source: Chapter 1 (Testing)"
+        },
+        {
+            q: "What is 'Generalization Error'?",
+            opts: ["The error rate on new, unseen cases", "The error on the training set", "The code error", "The human error"],
+            a: 0,
+            exp: "It tells you how well the model generalizes beyond what it has seen.",
+            src: "Source: Chapter 1 (Testing)"
+        },
+        {
+            q: "What is 'Cross-Validation'?",
+            opts: ["A technique to evaluate models by splitting training data into subsets", "Validating data across two computers", "Checking for viruses", "Mixing supervised and unsupervised"],
+            a: 0,
+            exp: "It helps compare models without 'wasting' too much data on a separate validation set.",
+            src: "Source: Chapter 1 (Validation)"
+        },
+        {
+            q: "According to the 'No Free Lunch' theorem:",
+            opts: ["No single algorithm works best for every problem", "AI is expensive", "Data requires cleaning", "Lunch is never free"],
+            a: 0,
+            exp: "You must try different algorithms; you cannot assume one (like Neural Nets) is always superior.",
+            src: "Source: Chapter 1 (Theory)"
+        },
+        {
+            q: "Which step usually takes the most time in a Machine Learning project?",
+            opts: ["Data Preparation / Cleaning", "Training the model", "Writing the report", "Installing Python"],
+            a: 0,
+            exp: "Real-world data is messy (missing values, outliers, text), requiring 80% of the effort.",
+            src: "Source: Chapter 1 (Workflow)"
+        },
+        {
+            q: "A pipeline in Machine Learning refers to:",
+            opts: ["A sequence of data processing components", "A gas pipe", "The internet connection", "The wiring in the computer"],
+            a: 0,
+            exp: "Data flows through transformations (filling missing values -> scaling -> training).",
+            src: "Source: Chapter 1 (Pipelines)"
+        },
+        {
+            q: "If a feature has missing values, standard practice is to:",
+            opts: ["Remove the attribute, remove the instance, or fill with median/mean", "Leave it empty", "Guess randomly", "Stop the project"],
+            a: 0,
+            exp: "Imputation (filling with mean/median) is common.",
+            src: "Source: Chapter 1 (Data Cleaning)"
+        },
+        {
+            q: "Categorical text attributes (like 'Red', 'Blue') must be:",
+            opts: ["Converted to numbers (Encoding)", "Deleted", "Kept as text", "Translated"],
+            a: 0,
+            exp: "ML algorithms typically require numerical input (One-Hot Encoding).",
+            src: "Source: Chapter 1 (Data Prep)"
+        },
+        {
+            q: "Feature Scaling (Normalization) is important because:",
+            opts: ["Algorithms perform poorly when scales differ widely", "It saves memory", "It looks better", "It is required by law"],
+            a: 0,
+            exp: "Distance-based algorithms (KNN, K-Means) fail if one feature ranges 0-1 and another 0-10000.",
+            src: "Source: Chapter 1 (Scaling)"
+        },
+        {
+            q: "The 'Test Set' should be used:",
+            opts: ["Only at the very end", "During training", "To tune hyperparameters", "To fix bugs"],
+            a: 0,
+            exp: "Looking at the test set too early leads to 'Data Snooping' bias.",
+            src: "Source: Chapter 1 (Methodology)"
+        },
+        {
+            q: "A 'Validation Set' is used to:",
+            opts: ["Select the best model and tune hyperparameters", "Train the model", "Test the final performance", "Clean the data"],
+            a: 0,
+            exp: "It acts as a mini-test set during the development phase.",
+            src: "Source: Chapter 1 (Validation)"
+        },
+        {
+            q: "Reinforcement Learning involves an agent and:",
+            opts: ["Rewards and Penalties", "Labeled examples", "A teacher", "Clusters"],
+            a: 0,
+            exp: "The agent learns a policy to maximize reward over time.",
+            src: "Source: Chapter 1 (Reinforcement)"
+        },
+        {
+            q: "Deep Learning is a subfield of ML that uses:",
+            opts: ["Multi-layered Neural Networks", "Decision Trees", "Linear Regression", "Genetic Algorithms"],
+            a: 0,
+            exp: "It mimics the brain's layered structure.",
+            src: "Source: Chapter 1 (AI Hierarchy)"
+        },
+        {
+            q: "The 'AI Winter' refers to:",
+            opts: ["Periods of reduced funding and interest in AI", "Cooling the servers", "Using AI for weather", "The invention of AI"],
+            a: 0,
+            exp: "Historical periods where AI failed to live up to hype.",
+            src: "Source: Chapter 1 (History)"
+        },
+        {
+            q: "In 1997, Deep Blue defeated Kasparov at chess. This is an example of:",
+            opts: ["Symbolic AI / Search", "Deep Learning", "Unsupervised Learning", "Neural Networks"],
+            a: 0,
+            exp: "Deep Blue used brute-force search and evaluation functions, not modern Deep Learning.",
+            src: "Source: Chapter 1 (History)"
+        },
+        {
+            q: "What is 'Feature Engineering'?",
+            opts: ["Creating new useful features from existing data", "Building the computer", "Writing python code", "Installing libraries"],
+            a: 0,
+            exp: "Using domain knowledge to create variables that make learning easier (e.g., creating 'BMI' from height and weight).",
+            src: "Source: Chapter 1 (Workflow)"
+        },
+        {
+            q: "Which is a 'Utility Function'?",
+            opts: ["A measure of how good a model's prediction is (to be maximized)", "A measure of error", "A cleaning tool", "A script"],
+            a: 0,
+            exp: "In fitness/utility, higher is better. In cost/loss, lower is better.",
+            src: "Source: Chapter 1 (Definitions)"
+        },
+        {
+            q: "What is 'Regularization'?",
+            opts: ["Constraining a model to make it simpler and reduce overfitting", "Making a model uniform", "Cleaning data", "Standardizing inputs"],
+            a: 0,
+            exp: "Techniques like L1/L2 penalties prevent the model from becoming too complex.",
+            src: "Source: Chapter 1 (Regularization)"
+        },
+        {
+            q: "What is the 'Hold-out' method?",
+            opts: ["Simply splitting data into one train set and one test set", "Holding the computer button", "Stopping the training early", "Ignoring data"],
+            a: 0,
+            exp: "The simplest form of validation.",
+            src: "Source: Chapter 1 (Validation)"
+        },
+        {
+            q: "Out-of-Core learning is used when:",
+            opts: ["Data is too large to fit in main memory (RAM)", "The CPU is broken", "Using a GPU", "Learning outside"],
+            a: 0,
+            exp: "It loads data in chunks, trains, and discards, allowing massive datasets to be processed.",
+            src: "Source: Chapter 1 (Large Scale)"
+        },
+        {
+            q: "Which of the following is a Regression task?",
+            opts: ["Predicting the value of a car", "Predicting if a tumor is benign", "Grouping fruit", "Sorting mail"],
+            a: 0,
+            exp: "Predicting a continuous monetary value is regression.",
+            src: "Source: Chapter 1 (Examples)"
+        },
+        {
+            q: "The 'Performance Measure' P is:",
+            opts: ["Specific to the task (e.g., % of correctly classified emails)", "The speed of the fan", "The cost of electricity", "The amount of data"],
+            a: 0,
+            exp: "Mitchell's definition relies on measuring P to see if learning happened.",
+            src: "Source: Chapter 1 (Definitions)"
+        },
+        {
+            q: "Data Mismatch occurs when:",
+            opts: ["The data used for training is different from the data used in production", "The file format is wrong", "The integers are strings", "The names don't match"],
+            a: 0,
+            exp: "Example: Training a car camera on clear day photos but using it at night.",
+            src: "Source: Chapter 1 (Challenges)"
+        },
+        {
+            q: "The primary goal of ML is:",
+            opts: ["To generalize to unseen data", "To memorize the training data perfectly", "To run fast", "To use Python"],
+            a: 0,
+            exp: "Memorization is easy; generalization is the intelligence.",
+            src: "Source: Chapter 1 (Goals)"
+        },
+        {
+            q: "Which company is famous for the AlphaGo breakthrough?",
+            opts: ["DeepMind", "OpenAI", "IBM", "Microsoft"],
+            a: 0,
+            exp: "AlphaGo used Reinforcement Learning to beat the world champion.",
+            src: "Source: Chapter 1 (History)"
+        }
+    ];
+
+    // --- APP LOGIC ---
+    let currentIdx = 0;
+    let score = 0;
+    
+    // DOM Elements
+    const ui = {
+        qNum: document.getElementById('qNum'),
+        progressFill: document.getElementById('progressFill'),
+        questionText: document.getElementById('questionText'),
+        optionsGrid: document.getElementById('optionsGrid'),
+        feedbackArea: document.getElementById('feedbackArea'),
+        feedbackTitle: document.getElementById('feedbackTitle'),
+        feedbackReason: document.getElementById('feedbackReason'),
+        feedbackSource: document.getElementById('feedbackSource'),
+        navFooter: document.getElementById('navFooter'),
+        quizBody: document.getElementById('quizBody'),
+        resultsView: document.getElementById('resultsView'),
+        finalScoreDisplay: document.getElementById('finalScoreDisplay'),
+        finalMsg: document.getElementById('finalMsg'),
+        appHeader: document.getElementById('appHeader')
+    };
+
+    function loadQ() {
+        const item = db[currentIdx];
+        ui.qNum.innerText = currentIdx + 1;
+        
+        // Progress
+        const pct = ((currentIdx) / db.length) * 100;
+        ui.progressFill.style.width = `${pct}%`;
+
+        // Text
+        ui.questionText.innerText = item.q;
+        
+        // Options
+        ui.optionsGrid.innerHTML = '';
+        item.opts.forEach((opt, i) => {
+            const btn = document.createElement('button');
+            btn.className = 'option';
+            btn.innerText = opt;
+            btn.onclick = () => handleAnswer(i, btn);
+            ui.optionsGrid.appendChild(btn);
+        });
+
+        // Reset UI
+        ui.feedbackArea.style.display = 'none';
+        ui.navFooter.style.display = 'none';
+        window.scrollTo(0,0);
+    }
+
+    function handleAnswer(choiceIdx, btnEl) {
+        const item = db[currentIdx];
+        const allBtns = document.querySelectorAll('.option');
+        
+        // Disable all
+        allBtns.forEach(b => b.disabled = true);
+
+        if (choiceIdx === item.a) {
+            score++;
+            btnEl.classList.add('correct');
+            ui.feedbackTitle.innerText = "Correct!";
+            ui.feedbackTitle.style.color = "#155724";
+        } else {
+            btnEl.classList.add('wrong');
+            allBtns[item.a].classList.add('correct'); // Show right one
+            ui.feedbackTitle.innerText = "Incorrect";
+            ui.feedbackTitle.style.color = "#721c24";
+        }
+
+        ui.feedbackReason.innerText = item.exp;
+        ui.feedbackSource.innerText = item.src;
+        ui.feedbackArea.style.display = 'block';
+        ui.navFooter.style.display = 'flex';
+    }
+
+    function nextQ() {
+        currentIdx++;
+        if (currentIdx < db.length) {
+            loadQ();
+        } else {
+            finishExam();
+        }
+    }
+
+    function finishExam() {
+        ui.quizBody.style.display = 'none';
+        ui.navFooter.style.display = 'none';
+        ui.appHeader.style.display = 'none';
+        ui.resultsView.style.display = 'block';
+
+        ui.finalScoreDisplay.innerText = `${score} / ${db.length}`;
+        
+        const percent = (score / db.length) * 100;
+        let msg = "";
+        if(percent >= 90) msg = "Legendary! You are an AI Master.";
+        else if(percent >= 75) msg = "Excellent work! You know your stuff.";
+        else if(percent >= 50) msg = "Good job! Keep reviewing the slides.";
+        else msg = "Keep studying! Focus on the basics.";
+        
+        ui.finalMsg.innerText = msg;
+    }
+
+    // Start
+    loadQ();
+
+</script>
+
+</body>
+</html>
